@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kamal Bisht — 24 Years of Evolution in Cybersecurity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy:  #f5f6f8;
+  --navy2: #ffffff;
+  --teal:  #047a52;
+  --teal2: #0a6645;
+  --gold:  #b06000;
+  --gold2: #8a4800;
+  --ice:   #1f2937;
+  --mist:  #374151;
+  --white: #111827;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-ui: 'Outfit', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--navy);
+  color: var(--white);
+  font-family: var(--font-ui);
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed; z-index: 9999;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed; z-index: 9998;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(4,122,82,0.4);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s, width 0.3s, height 0.3s;
+}
+
+/* ── SLIDES ENGINE ── */
+.slides { width: 100vw; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0s;
+  overflow: hidden;
+}
+.slide.active { opacity: 1; pointer-events: all; }
+.slide.entering { animation: slideEnter 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+.slide.exiting  { animation: slideExit  0.6s cubic-bezier(0.4,0,1,1)    forwards; }
+
+@keyframes slideEnter {
+  from { opacity: 0; transform: scale(0.97) translateY(18px); filter: blur(6px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    filter: blur(0); }
+}
+@keyframes slideExit {
+  from { opacity: 1; transform: scale(1)    translateY(0);    filter: blur(0); }
+  to   { opacity: 0; transform: scale(1.02) translateY(-12px); filter: blur(4px); }
+}
+
+/* ── SHARED BG EFFECTS ── */
+.bg-mesh {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+}
+.bg-mesh canvas { position: absolute; inset: 0; }
+
+.bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(4,122,82,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(4,122,82,0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  position: fixed; bottom: 0; left: 0; height: 2px;
+  background: linear-gradient(to right, var(--teal), var(--gold));
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  z-index: 200;
+}
+
+/* ── SLIDE COUNTER ── */
+.slide-counter {
+  position: fixed; bottom: 1.5rem; right: 2rem;
+  font-family: var(--font-mono); font-size: 0.72rem;
+  color: rgba(200,223,240,0.35);
+  z-index: 200; letter-spacing: 0.08em;
+}
+
+/* ── NAV DOTS ── */
+.nav-dots {
+  position: fixed; bottom: 1.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 200;
+}
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(200,223,240,0.2);
+  cursor: pointer; transition: all 0.3s;
+}
+.dot.active { background: var(--teal); transform: scale(1.4); }
+
+/* ── ARROW CONTROLS ── */
+.arrow {
+  position: fixed; top: 50%; z-index: 200;
+  transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border: 1px solid rgba(4,122,82,0.2);
+  border-radius: 50%;
+  background: rgba(245,246,248,0.85);
+  backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s;
+  color: var(--mist);
+}
+.arrow:hover { border-color: var(--teal); color: var(--teal); background: rgba(4,122,82,0.1); }
+.arrow-prev { left: 1.5rem; }
+.arrow-next { right: 1.5rem; }
+.arrow svg { width: 16px; height: 16px; }
+
+/* AUTO-PLAY indicator */
+.autoplay-btn {
+  position: fixed; top: 1.5rem; right: 2rem; z-index: 200;
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: rgba(200,223,240,0.4);
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.autoplay-btn:hover { color: var(--teal); }
+.autoplay-btn .dot-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal);
+}
+.autoplay-btn.paused .dot-pulse { background: var(--mist); }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.autoplay-btn:not(.paused) .dot-pulse { animation: pulse 1.5s infinite; }
+
+/* ══════════════════════════════════════
+   SLIDE 1 — TITLE
+═══════════════════════════════════════ */
+#s1 { background: var(--navy); }
+#s1 .bg-mesh { background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(4,122,82,0.07) 0%, transparent 70%),
+               radial-gradient(ellipse 50% 40% at 20% 70%, rgba(0,120,200,0.06) 0%, transparent 60%); }
+
+.s1-inner { position: relative; z-index: 1; text-align: center; max-width: 860px; padding: 2rem; }
+.s1-eyebrow {
+  font-family: var(--font-mono); font-size: 0.78rem;
+  color: var(--teal); letter-spacing: 0.2em; text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex; align-items: center; justify-content: center; gap: 1rem;
+}
+.s1-eyebrow::before, .s1-eyebrow::after {
+  content: ''; width: 40px; height: 1px; background: var(--teal); opacity: 0.5;
+}
+.s1-name {
+  font-family: var(--font-display); font-size: clamp(4rem, 9vw, 7.5rem);
+  font-weight: 300; line-height: 0.95; color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.s1-name em { font-style: italic; color: var(--teal); }
+.s1-title {
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem); font-weight: 400;
+  color: var(--mist); letter-spacing: 0.06em; margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+.s1-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+.s1-pill {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(4,122,82,0.3);
+  color: var(--teal); background: rgba(4,122,82,0.07);
+  letter-spacing: 0.06em;
+}
+.s1-stats { display: flex; gap: 3rem; justify-content: center; }
+.s1-stat-n {
+  font-family: var(--font-display); font-size: 3.5rem;
+  color: var(--white); line-height: 1;
+}
+.s1-stat-n span { color: var(--teal); }
+.s1-stat-l { font-family: var(--font-mono); font-size: 0.65rem; color: var(--mist); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+
+/* Staggered entry animations */
+.s1-inner > * { opacity: 0; }
+.slide.active .s1-inner > *:nth-child(1) { animation: fadeUp 0.7s 0.2s ease forwards; }
+.slide.active .s1-inner > *:nth-child(2) { animation: fadeUp 0.7s 0.4s ease forwards; }
+.slide.active .s1-inner > *:nth-child(3) { animation: fadeUp 0.7s 0.6s ease forwards; }
+.slide.active .s1-inner > *:nth-child(4) { animation: fadeUp 0.7s 0.75s ease forwards; }
+.slide.active .s1-inner > *:nth-child(5) { animation: fadeUp 0.7s 0.9s ease forwards; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   SLIDE 2 — ACADEMIC FOUNDATION
+═══════════════════════════════════════ */
+#s2 { background: var(--navy2); }
+#s2 .bg-mesh { background: radial-gradient(ellipse 60% 60% at 15% 50%, rgba(0,100,180,0.1) 0%, transparent 65%); }
+
+.s2-inner { position: relative; z-index: 1; max-width: 1000px; width: 100%; padding: 1.5rem 2rem; }
+.slide-header { margin-bottom: 1rem; }
+.slide-num { font-family: var(--font-mono); font-size: 0.7rem; color: var(--teal); letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+.slide-h { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 300; line-height: 1.05; }
+.slide-h em { font-style: italic; color: var(--teal); }
+
+.edu-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.edu-card {
+  background: #ffffff; border: 1px solid rgba(4,122,82,0.12); box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  padding: 1.25rem; position: relative; overflow: hidden;
+}
+.edu-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--teal), transparent);
+}
+.edu-year { font-family: var(--font-mono); font-size: 0.7rem; color: var(--teal); letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+.edu-deg { font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+.edu-school { font-size: 0.85rem; color: var(--teal2); margin-bottom: 1rem; }
+.edu-desc { font-size: 0.88rem; color: var(--mist); line-height: 1.7; }
+
+.insight-box {
+  background: rgba(4,122,82,0.05); border: 1px solid rgba(4,122,82,0.18);
+  border-left: 3px solid var(--teal); padding: 0.85rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.insight-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+.insight-text { font-family: var(--font-display); font-size: 1.2rem; font-style: italic; color: var(--ice); line-height: 1.6; }
+
+/* ══════════════════════════════════════
+   SLIDE 3 — MCAFEE ERA
+═══════════════════════════════════════ */
+#s3 { background: var(--navy); }
+#s3 .bg-mesh { background: radial-gradient(ellipse 70% 50% at 80% 30%, rgba(176,96,0,0.06) 0%, transparent 60%); }
+
+.timeline-slide { position: relative; z-index: 1; max-width: 1020px; width: 100%; padding: 1.25rem 2rem; }
+
+.tl-phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-top: 1rem; }
+.tl-phase {
+  background: #ffffff; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  padding: 1rem; position: relative;
+  transition: border-color 0.3s;
+}
+.tl-phase:hover { border-color: rgba(4,122,82,0.25); }
+.tl-phase-num {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 300;
+  color: rgba(4,122,82,0.15); line-height: 1; margin-bottom: 0.25rem;
+}
+.tl-phase-role { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+.tl-phase-dates { font-family: var(--font-mono); font-size: 0.68rem; color: var(--teal); margin-bottom: 1rem; letter-spacing: 0.05em; }
+.tl-phase-pts { list-style: none; }
+.tl-phase-pts li {
+  font-size: 0.82rem; color: var(--mist); line-height: 1.65; padding-left: 1rem; position: relative; margin-bottom: 0.4rem;
+}
+.tl-phase-pts li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-size: 0.75rem; }
+
+.acquisition-banner {
+  margin-top: 0.85rem;
+  background: linear-gradient(135deg, rgba(176,96,0,0.1), rgba(176,96,0,0.04));
+  border: 1px solid rgba(176,96,0,0.25);
+  padding: 1rem 1.75rem;
+  display: flex; align-items: center; gap: 2rem;
+}
+.acq-num { font-family: var(--font-display); font-size: 2.2rem; color: var(--gold); }
+.acq-label { font-size: 0.85rem; color: var(--ice); }
+.acq-label strong { color: var(--gold); }
+
+/* ══════════════════════════════════════
+   SLIDE 4 — SECURITY LEADERSHIP
+═══════════════════════════════════════ */
+#s4 { background: var(--navy2); }
+#s4 .bg-mesh { background: radial-gradient(ellipse 50% 70% at 50% 50%, rgba(0,160,200,0.07) 0%, transparent 65%); }
+
+.impact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem; margin-top: 1rem; }
+.impact-card {
+  background: #ffffff; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  padding: 1.1rem; position: relative; overflow: hidden;
+}
+.impact-card::after {
+  content: attr(data-num);
+  position: absolute; right: 1.25rem; bottom: 0.75rem;
+  font-family: var(--font-display); font-size: 5rem; font-weight: 300;
+  color: rgba(4,122,82,0.06); line-height: 1; pointer-events: none;
+}
+.impact-icon { font-size: 1.4rem; margin-bottom: 0.75rem; }
+.impact-title { font-size: 0.95rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+.impact-desc { font-size: 0.83rem; color: var(--mist); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   SLIDE 5 — ATTIVO / S1
+═══════════════════════════════════════ */
+#s5 { background: var(--navy); }
+#s5 .bg-mesh { background: radial-gradient(ellipse 65% 55% at 70% 60%, rgba(4,122,82,0.08) 0%, transparent 60%); }
+
+.attivo-inner { position: relative; z-index: 1; max-width: 1020px; width: 100%; padding: 1.25rem 2rem; }
+
+.metrics-row { display: flex; gap: 0.85rem; margin: 1rem 0; }
+.metric-box {
+  flex: 1; background: rgba(4,122,82,0.06); border: 1px solid rgba(4,122,82,0.18);
+  padding: 0.9rem 0.5rem; text-align: center;
+}
+.metric-num { font-family: var(--font-display); font-size: 2.2rem; color: var(--teal); line-height: 1; }
+.metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--mist); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.4rem; }
+
+.tech-flow {
+  background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06);
+  padding: 0.9rem 1.25rem;
+}
+.flow-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+.flow-nodes { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.flow-node {
+  font-family: var(--font-mono); font-size: 0.75rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(4,122,82,0.08); border: 1px solid rgba(4,122,82,0.2);
+  color: var(--ice);
+}
+.flow-arrow { color: var(--teal); font-size: 0.8rem; opacity: 0.6; }
+
+.ownership-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 0.85rem; }
+.own-box {
+  border: 1px solid rgba(0,0,0,0.07); padding: 0.65rem;
+  text-align: center;
+}
+.own-icon { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.own-label { font-size: 0.78rem; color: var(--ice); font-weight: 600; }
+.own-sub { font-size: 0.7rem; color: var(--mist); margin-top: 0.2rem; }
+
+/* ══════════════════════════════════════
+   SLIDE 6 — QUALITY PHILOSOPHY
+═══════════════════════════════════════ */
+#s6 { background: var(--navy2); }
+#s6 .bg-mesh { background: radial-gradient(ellipse 60% 50% at 30% 40%, rgba(4,122,82,0.07) 0%, transparent 65%); }
+
+.qa-inner { position: relative; z-index: 1; max-width: 1020px; width: 100%; padding: 1.25rem 2rem; }
+
+.pyramid { display: flex; flex-direction: column; gap: 0.4rem; margin: 1rem 0; align-items: center; }
+.pyramid-row {
+  display: flex; align-items: center; gap: 1.5rem;
+  width: 100%;
+}
+.pyramid-label-l {
+  font-family: var(--font-mono); font-size: 0.68rem;
+  color: var(--teal); text-align: right; min-width: 120px; letter-spacing: 0.06em;
+}
+.pyramid-bar {
+  flex: 1; padding: 0.6rem 1.25rem;
+  background: #ffffff; border: 1px solid rgba(4,122,82,0.15); box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.pyramid-bar::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(to right, rgba(4,122,82,0.12), transparent);
+}
+.pyramid-bar-title { font-size: 0.9rem; font-weight: 600; color: var(--white); position: relative; }
+.pyramid-bar-detail { font-size: 0.78rem; color: var(--mist); position: relative; text-align: right; max-width: 340px; line-height: 1.5; }
+
+.qa-innovations { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.75rem; }
+.qa-inn {
+  background: #ffffff; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  padding: 0.85rem;
+}
+.qa-inn-title { font-size: 0.85rem; font-weight: 600; color: var(--teal); margin-bottom: 0.4rem; }
+.qa-inn-desc { font-size: 0.78rem; color: var(--mist); line-height: 1.65; }
+
+/* ══════════════════════════════════════
+   SLIDE 7 — AI ERA
+═══════════════════════════════════════ */
+#s7 { background: var(--navy); }
+#s7 .bg-mesh {
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(4,122,82,0.09) 0%, transparent 65%),
+              radial-gradient(ellipse 40% 40% at 80% 20%, rgba(176,96,0,0.06) 0%, transparent 55%);
+}
+
+.ai-inner { position: relative; z-index: 1; max-width: 960px; width: 100%; padding: 1.25rem 2rem; text-align: center; }
+.ai-inner .slide-header { text-align: center; }
+
+.ai-nodes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 1.25rem 0; }
+.ai-node {
+  background: #ffffff; border: 1px solid rgba(4,122,82,0.2); box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  padding: 1rem 1.25rem; min-width: 185px; text-align: left;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.ai-node:hover { border-color: var(--teal); transform: translateY(-3px); }
+.ai-node::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(to right, var(--teal), transparent);
+}
+.ai-node-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.ai-node-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+.ai-node-desc { font-size: 0.78rem; color: var(--mist); line-height: 1.6; }
+
+.cert-highlight {
+  display: inline-flex; align-items: center; gap: 1rem;
+  background: rgba(4,122,82,0.07); border: 1px solid rgba(160,92,0,0.2);
+  padding: 1.25rem 2rem; margin: 0 auto;
+}
+.cert-highlight-icon { font-size: 2rem; }
+.cert-highlight-text { text-align: left; }
+.cert-highlight-title { font-size: 1rem; font-weight: 600; color: var(--white); }
+.cert-highlight-sub { font-size: 0.8rem; color: var(--teal); font-family: var(--font-mono); }
+
+/* ══════════════════════════════════════
+   SLIDE 8 — CLOSING
+═══════════════════════════════════════ */
+#s8 { background: var(--navy2); }
+#s8 .bg-mesh { background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(4,122,82,0.08) 0%, transparent 70%); }
+
+.close-inner { position: relative; z-index: 1; text-align: center; max-width: 720px; padding: 1rem 2rem; }
+.close-name { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; line-height: 1; margin-bottom: 1rem; }
+.close-name em { font-style: italic; color: var(--teal); }
+.close-tagline { font-size: 1rem; color: var(--mist); line-height: 1.6; max-width: 560px; margin: 0 auto 1.5rem; }
+.close-contact { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; }
+.close-link {
+  font-family: var(--font-mono); font-size: 0.78rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(4,122,82,0.3); color: var(--teal);
+  text-decoration: none; letter-spacing: 0.06em;
+  transition: background 0.2s, color 0.2s;
+}
+.close-link:hover { background: rgba(4,122,82,0.12); }
+.close-all-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+.close-pill {
+  font-family: var(--font-mono); font-size: 0.65rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid rgba(120,160,185,0.2);
+  color: var(--mist); letter-spacing: 0.05em;
+}
+
+/* ── REVEAL ANIMATIONS FOR ELEMENTS ── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.shown { opacity: 1; transform: translateY(0); }
+
+/* Count-up */
+.countup { display: inline; }
+
+  /* ── VIEWPORT SAFETY SCALER ── */
+  .slide-scaler {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .s2-inner, .timeline-slide, .attivo-inner, .qa-inner, .ai-inner {
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(4,122,82,0.3) transparent;
+  }
+  .s2-inner::-webkit-scrollbar, .timeline-slide::-webkit-scrollbar,
+  .attivo-inner::-webkit-scrollbar, .qa-inner::-webkit-scrollbar,
+  .ai-inner::-webkit-scrollbar { width: 3px; }
+  .s2-inner::-webkit-scrollbar-track, .timeline-slide::-webkit-scrollbar-track,
+  .attivo-inner::-webkit-scrollbar-track, .qa-inner::-webkit-scrollbar-track,
+  .ai-inner::-webkit-scrollbar-track { background: transparent; }
+  .s2-inner::-webkit-scrollbar-thumb, .timeline-slide::-webkit-scrollbar-thumb,
+  .attivo-inner::-webkit-scrollbar-thumb, .qa-inner::-webkit-scrollbar-thumb,
+  .ai-inner::-webkit-scrollbar-thumb { background: rgba(4,122,82,0.3); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter">01 / 08</div>
+
+<div class="nav-dots" id="navDots"></div>
+
+<button class="arrow arrow-prev" id="prevBtn" aria-label="Previous">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+</button>
+<button class="arrow arrow-next" id="nextBtn" aria-label="Next">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,6 15,12 9,18"/></svg>
+</button>
+
+<div class="autoplay-btn" id="autoplayBtn">
+  <div class="dot-pulse"></div>
+  <span>AUTO</span>
+</div>
+
+<div class="slides" id="slides">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" id="s1">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="s1-inner">
+      <div class="s1-eyebrow">Engineering Leader · Cybersecurity · 2002 – 2026</div>
+      <h1 class="s1-name">Kamal<br><em>Bisht</em></h1>
+      <p class="s1-title">Director of Engineering · Quality Architecture · AI Governance<br>Building frameworks that outlast the people who build them.</p>
+      <div class="s1-pills">
+        <span class="s1-pill">PMP</span>
+        <span class="s1-pill">CEH</span>
+        <span class="s1-pill">ISO 42001 LA</span>
+        <span class="s1-pill">IIT Delhi M.Tech</span>
+        <span class="s1-pill">McAfee · FireEye · SentinelOne</span>
+      </div>
+      <div class="s1-stats">
+        <div><div class="s1-stat-n"><span class="countup" data-target="24">0</span><span>+</span></div><div class="s1-stat-l">Years</div></div>
+        <div><div class="s1-stat-n">$616<span>M</span></div><div class="s1-stat-l">Acquisition</div></div>
+        <div><div class="s1-stat-n"><span class="countup" data-target="20">0</span><span>+</span></div><div class="s1-stat-l">Engineers Led</div></div>
+        <div><div class="s1-stat-n"><span class="countup" data-target="70">0</span><span>%</span></div><div class="s1-stat-l">Manual Test Reduction</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: ACADEMIC FOUNDATION -->
+  <div class="slide" id="s2">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="s2-inner">
+      <div class="slide-header">
+        <div class="slide-num">01 — Foundation</div>
+        <h2 class="slide-h">Where the<br><em>signal-first</em> mindset was born.</h2>
+      </div>
+      <div class="edu-cards">
+        <div class="edu-card reveal">
+          <div class="edu-year">IIT Delhi · 2000–2001</div>
+          <div class="edu-deg">M.Tech., Computer Technology</div>
+          <div class="edu-school">Indian Institute of Technology Delhi</div>
+          <div class="edu-desc">Thesis: GSOM neural network–based Network Intrusion Detection System. Statistically proved that malicious traffic is inherently separable from normal traffic — the origin of measurement-first thinking in security.</div>
+        </div>
+        <div class="edu-card reveal">
+          <div class="edu-year">G.B. Pant University · 1996–2000</div>
+          <div class="edu-deg">B.Tech., Electrical Engineering</div>
+          <div class="edu-school">G.B. Pant University, Pantnagar</div>
+          <div class="edu-desc">Project: Microcontroller-based radar firmware for DRDO Dehradun. Constrained-environment engineering builds an intuition for system optimisation that every engineer should have.</div>
+        </div>
+      </div>
+      <div class="insight-box reveal">
+        <div class="insight-label">Core insight established here</div>
+        <div class="insight-text">"Tuning context windows, measuring the right signals, and understanding system constraints — this is QA at its deepest level."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: MCAFEE ERA -->
+  <div class="slide" id="s3">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="timeline-slide">
+      <div class="slide-header">
+        <div class="slide-num">02 — McAfee (2003–2016)</div>
+        <h2 class="slide-h">11 years building<br><em>security at scale.</em></h2>
+      </div>
+      <div class="tl-phases">
+        <div class="tl-phase reveal">
+          <div class="tl-phase-num">01</div>
+          <div class="tl-phase-role">Software Engineer → Sr. Project Lead</div>
+          <div class="tl-phase-dates">Jun 2003 – Mar 2009</div>
+          <ul class="tl-phase-pts">
+            <li>Core member of Host IPS team (Entercept acquisition) — process injection, function hooking, kernel drivers</li>
+            <li>TDI/WFP network stack, ELAM, WPA/WPR profiling</li>
+            <li>Founded Security Club; drove threat modelling at site level</li>
+            <li>Presented at IIITB, NIT Trichy, ISCF-2006</li>
+          </ul>
+        </div>
+        <div class="tl-phase reveal">
+          <div class="tl-phase-num">02</div>
+          <div class="tl-phase-role">Engineering QA Manager</div>
+          <div class="tl-phase-dates">Apr 2009 – Jan 2016</div>
+          <ul class="tl-phase-pts">
+            <li>McAfee Labs: managed common driver SDK across 25 products</li>
+            <li>Built sanity lab covering all 25 products as release gate</li>
+            <li>Security Champions programme absorbed into global scheme</li>
+            <li>Third-party app certification process with IT rollout team</li>
+            <li>25% release cycle efficiency improvement</li>
+          </ul>
+        </div>
+        <div class="tl-phase reveal">
+          <div class="tl-phase-num">03</div>
+          <div class="tl-phase-role">Certifications & Leadership</div>
+          <div class="tl-phase-dates">2006–2007</div>
+          <ul class="tl-phase-pts">
+            <li>PMP — Project Management Institute (2007)</li>
+            <li>CEH v3 — EC-Council</li>
+            <li>Represented org at ISCF-2006, SRM University Chennai</li>
+            <li>Led kernel performance benchmarking — synthetic workloads delivered in 10 days for critical customer escalation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="acquisition-banner reveal">
+        <div class="acq-num">$7.68B</div>
+        <div class="acq-label"><strong>Intel acquisition of McAfee (2011)</strong> — Led QA management transition, ensuring platform stability through the largest security acquisition in history at the time.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: SECURITY LEADERSHIP -->
+  <div class="slide" id="s4">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="s2-inner">
+      <div class="slide-header">
+        <div class="slide-num">03 — FireEye (2016)</div>
+        <h2 class="slide-h">Efficacy at<br><em>millions of samples.</em></h2>
+      </div>
+      <div class="impact-grid">
+        <div class="impact-card reveal" data-num="01">
+          <div class="impact-icon">🔬</div>
+          <div class="impact-title">Efficacy Lab Infrastructure</div>
+          <div class="impact-desc">Built end-to-end lab running millions of malware sample sets for content detection validation. Elasticsearch-backed pipeline, Python automation, web crawlers for continuous sample acquisition.</div>
+        </div>
+        <div class="impact-card reveal" data-num="02">
+          <div class="impact-icon">⚡</div>
+          <div class="impact-title">4 Parallel Enterprise Projects</div>
+          <div class="impact-desc">Simultaneously managed exploit detection, kernel services, and next-generation platform initiatives within the Enterprise Endpoint group.</div>
+        </div>
+        <div class="impact-card reveal" data-num="03">
+          <div class="impact-icon">🐍</div>
+          <div class="impact-title">Python-First Automation</div>
+          <div class="impact-desc">Evolved automation stack from earlier Ruby on Rails days to Python — and observed the recurring challenge of fragmented frameworks across orgs, which shaped the unified approach at Attivo.</div>
+        </div>
+        <div class="impact-card reveal" data-num="04">
+          <div class="impact-icon">🔍</div>
+          <div class="impact-title">Pattern Recognition</div>
+          <div class="impact-desc">FireEye's deception strategy discussions confirmed what lateral movement detection could do — directly leading to the decision to join Attivo Networks in 2017.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: ATTIVO / S1 -->
+  <div class="slide" id="s5">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="attivo-inner">
+      <div class="slide-header">
+        <div class="slide-num">04 — Attivo Networks → SentinelOne (2017–2025)</div>
+        <h2 class="slide-h">From startup to<br><em>$616M acquisition.</em></h2>
+      </div>
+      <div class="metrics-row">
+        <div class="metric-box reveal"><div class="metric-num"><span class="countup" data-target="70">0</span>%</div><div class="metric-label">Manual test reduction</div></div>
+        <div class="metric-box reveal"><div class="metric-num"><span class="countup" data-target="35">0</span>%</div><div class="metric-label">Fewer production defects</div></div>
+        <div class="metric-box reveal"><div class="metric-num"><span class="countup" data-target="40">0</span>%</div><div class="metric-label">Faster bug resolution</div></div>
+        <div class="metric-box reveal"><div class="metric-num"><span class="countup" data-target="25">0</span>%</div><div class="metric-label">Release cycle improvement</div></div>
+        <div class="metric-box reveal"><div class="metric-num">20<span style="font-size:1.8rem">+</span></div><div class="metric-label">Engineers built & mentored</div></div>
+      </div>
+      <div class="tech-flow reveal">
+        <div class="flow-label">Cloud-native migration path</div>
+        <div class="flow-nodes">
+          <span class="flow-node">Monolith</span><span class="flow-arrow">→</span>
+          <span class="flow-node">EC2 + LB</span><span class="flow-arrow">→</span>
+          <span class="flow-node">Kafka telemetry</span><span class="flow-arrow">→</span>
+          <span class="flow-node">OCSF normaliser</span><span class="flow-arrow">→</span>
+          <span class="flow-node">ECS microservices</span><span class="flow-arrow">→</span>
+          <span class="flow-node">ClickHouse</span><span class="flow-arrow">→</span>
+          <span class="flow-node">GLU + KCP</span><span class="flow-arrow">→</span>
+          <span class="flow-node">Feature flags</span><span class="flow-arrow">→</span>
+          <span class="flow-node">Shadow mode</span>
+        </div>
+      </div>
+      <div class="ownership-grid">
+        <div class="own-box reveal"><div class="own-icon">⚙️</div><div class="own-label">Quality Engineering</div><div class="own-sub">4 groups, 20+ engineers</div></div>
+        <div class="own-box reveal"><div class="own-icon">🛡️</div><div class="own-label">AppSec</div><div class="own-sub">SAST · DAST · BurpSuite</div></div>
+        <div class="own-box reveal"><div class="own-icon">🚀</div><div class="own-label">Release Management</div><div class="own-sub">Branching strategy · CI/CD</div></div>
+        <div class="own-box reveal"><div class="own-icon">🖥️</div><div class="own-label">IT Operations</div><div class="own-sub">Lab setup · Appliances</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: QA PHILOSOPHY -->
+  <div class="slide" id="s6">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="qa-inner">
+      <div class="slide-header">
+        <div class="slide-num">05 — Quality Philosophy</div>
+        <h2 class="slide-h">Quality is a<br><em>layered discipline.</em></h2>
+      </div>
+      <div class="pyramid">
+        <div class="pyramid-row reveal">
+          <div class="pyramid-label-l">PRODUCTION</div>
+          <div class="pyramid-bar" style="background: rgba(4,122,82,0.08); border-color: rgba(4,122,82,0.25);">
+            <span class="pyramid-bar-title">Test Cases</span>
+            <span class="pyramid-bar-detail">End-to-end coverage · Shift-left · Customer-scenario driven</span>
+          </div>
+        </div>
+        <div class="pyramid-row reveal">
+          <div class="pyramid-label-l">INTEGRATION</div>
+          <div class="pyramid-bar" style="margin: 0 1.5rem;">
+            <span class="pyramid-bar-title">SDKs & APIs</span>
+            <span class="pyramid-bar-detail">Flask-exposed helpers available to dev for integration tests</span>
+          </div>
+        </div>
+        <div class="pyramid-row reveal">
+          <div class="pyramid-label-l">UNIT</div>
+          <div class="pyramid-bar" style="margin: 0 3rem;">
+            <span class="pyramid-bar-title">Helper Functions</span>
+            <span class="pyramid-bar-detail">Windsurf-assisted generation · Mocks · Lint checks</span>
+          </div>
+        </div>
+        <div class="pyramid-row reveal">
+          <div class="pyramid-label-l">FOUNDATION</div>
+          <div class="pyramid-bar" style="margin: 0 4.5rem; background: rgba(4,122,82,0.04);">
+            <span class="pyramid-bar-title">Infrastructure Layer</span>
+            <span class="pyramid-bar-detail">Common framework across all orgs · Perl → Ruby → Python</span>
+          </div>
+        </div>
+      </div>
+      <div class="qa-innovations">
+        <div class="qa-inn reveal">
+          <div class="qa-inn-title">LLM-Assisted QA</div>
+          <div class="qa-inn-desc">Explored ML models learning from automation + production code to generate dynamic tests instead of static checks.</div>
+        </div>
+        <div class="qa-inn reveal">
+          <div class="qa-inn-title">Anomaly Detection</div>
+          <div class="qa-inn-desc">Researched OpenSearch ML-based anomaly analysis to automatically triage automation failures at scale.</div>
+        </div>
+        <div class="qa-inn reveal">
+          <div class="qa-inn-title">Modern QA Concepts</div>
+          <div class="qa-inn-desc">A/B testing · LLM-as-judge · Golden datasets · Playday sessions · Shadow mode for detection rollouts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: AI ERA -->
+  <div class="slide" id="s7">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="ai-inner">
+      <div class="slide-header">
+        <div class="slide-num">06 — The AI Era (2025–present)</div>
+        <h2 class="slide-h">Where security meets<br><em>artificial intelligence.</em></h2>
+      </div>
+      <div class="ai-nodes">
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">🏛️</div>
+          <div class="ai-node-title">ISO 42001 Lead Auditor</div>
+          <div class="ai-node-desc">TÜV SÜD certified. AI Management Systems audit from an Information Security perspective. Bridges ISO 27001 and AI governance.</div>
+        </div>
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">🤖</div>
+          <div class="ai-node-title">Multi-Agent Systems</div>
+          <div class="ai-node-desc">Exploring Claude Code to build multi-agent solutions for investment and intelligent assistance. Hands-on LLM engineering.</div>
+        </div>
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">🏢</div>
+          <div class="ai-node-title">Consuting Experience</div>
+          <div class="ai-node-desc">Defined converged Cyber + AI Command Centre vision: SOC, GRC, AI Governance, Exposure Management, post-quantum cryptography.</div>
+        </div>
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">📐</div>
+          <div class="ai-node-title">Product Vision via LLMs</div>
+          <div class="ai-node-desc">Extensively used NLP and LLM features of Figma to accelerate product design. Applying AI to the design process itself.</div>
+        </div>
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">🔐</div>
+          <div class="ai-node-title">Compliance Stack</div>
+          <div class="ai-node-desc">ISO 42001 · ISO 27001 · ISO 9001 · FedRAMP / FIPS awareness. Regulatory-aware engineering leadership.</div>
+        </div>
+        <div class="ai-node reveal">
+          <div class="ai-node-icon">📚</div>
+          <div class="ai-node-title">Continuous Learning</div>
+          <div class="ai-node-desc">Outskills AI engineering courses. Applying A/B testing, LLM-as-judge, and golden dataset concepts to quality engineering.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: CLOSING -->
+  <div class="slide" id="s8">
+    <div class="bg-mesh"></div>
+    <div class="bg-grid"></div>
+    <div class="close-inner">
+      <div class="close-name reveal">Kamal<br><em>Bisht</em></div>
+      <p class="close-tagline reveal">24 years of seamless evolution — from neural networks detecting intrusions at IIT Delhi, to building the quality and security foundations of companies acquired for billions, to leading AI governance in the age of LLMs.</p>
+      <div class="close-contact reveal">
+        <a class="close-link" href="mailto:kamalbisht@yahoo.com">kamalbisht@yahoo.com</a>
+        <a class="close-link" href="tel:+919845229450">+91-9845229450</a>
+        <span class="close-link">Bengaluru, India</span>
+      </div>
+      <div class="close-all-pills reveal">
+        <span class="close-pill">Quality Engineering</span>
+        <span class="close-pill">AppSec</span>
+        <span class="close-pill">Cloud Architecture</span>
+        <span class="close-pill">Deception / ITDR</span>
+        <span class="close-pill">AI Governance</span>
+        <span class="close-pill">Release Management</span>
+        <span class="close-pill">Kernel QA</span>
+        <span class="close-pill">ISO 42001</span>
+        <span class="close-pill">PMP</span>
+        <span class="close-pill">CEH</span>
+        <span class="close-pill">Multi-agent Systems</span>
+        <span class="close-pill">Python · Ruby · Perl</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// ── SLIDES ──
+const TOTAL = 8;
+let current = 0;
+let autoPlay = true;
+let autoTimer = null;
+const AUTO_DELAY = 7000;
+
+const slideEls = document.querySelectorAll('.slide');
+const progressBar = document.getElementById('progressBar');
+const slideCounter = document.getElementById('slideCounter');
+const navDotsEl = document.getElementById('navDots');
+
+// Build nav dots
+for (let i = 0; i < TOTAL; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  navDotsEl.appendChild(d);
+}
+
+function updateUI() {
+  const pct = ((current + 1) / TOTAL) * 100;
+  progressBar.style.width = pct + '%';
+  slideCounter.textContent = String(current + 1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+}
+
+function goTo(idx) {
+  if (idx === current) return;
+  const prev = current;
+  current = Math.max(0, Math.min(TOTAL-1, idx));
+
+  slideEls[prev].classList.remove('active');
+  slideEls[prev].classList.add('exiting');
+  setTimeout(() => slideEls[prev].classList.remove('exiting'), 600);
+
+  slideEls[current].classList.add('active', 'entering');
+  setTimeout(() => slideEls[current].classList.remove('entering'), 900);
+
+  updateUI();
+  triggerReveals(current);
+  triggerCountUps(current);
+  resetAutoPlay();
+}
+
+function next() { goTo(current < TOTAL-1 ? current+1 : 0); }
+function prev() { goTo(current > 0 ? current-1 : TOTAL-1); }
+
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+});
+
+// Swipe
+let touchX = 0;
+document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = touchX - e.changedTouches[0].clientX;
+  if (Math.abs(dx) > 50) dx > 0 ? next() : prev();
+});
+
+// ── AUTO-PLAY ──
+const autoBtn = document.getElementById('autoplayBtn');
+function resetAutoPlay() {
+  clearTimeout(autoTimer);
+  if (autoPlay) autoTimer = setTimeout(next, AUTO_DELAY);
+}
+function toggleAuto() {
+  autoPlay = !autoPlay;
+  autoBtn.classList.toggle('paused', !autoPlay);
+  autoBtn.querySelector('span').textContent = autoPlay ? 'AUTO' : 'MANUAL';
+  resetAutoPlay();
+}
+autoBtn.addEventListener('click', toggleAuto);
+resetAutoPlay();
+
+// ── REVEAL ANIMATIONS ──
+function triggerReveals(slideIdx) {
+  const slide = slideEls[slideIdx];
+  const revealEls = slide.querySelectorAll('.reveal');
+  revealEls.forEach(el => el.classList.remove('shown'));
+  revealEls.forEach((el, i) => {
+    setTimeout(() => el.classList.add('shown'), 300 + i * 120);
+  });
+}
+
+// ── COUNT-UP ──
+function triggerCountUps(slideIdx) {
+  const slide = slideEls[slideIdx];
+  slide.querySelectorAll('.countup').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    let start = 0;
+    const dur = 1200;
+    const step = dur / target;
+    el.textContent = '0';
+    const interval = setInterval(() => {
+      start++;
+      el.textContent = start;
+      if (start >= target) clearInterval(interval);
+    }, step);
+  });
+}
+
+// Init first slide
+updateUI();
+triggerReveals(0);
+triggerCountUps(0);
+</script>
+</body>
+</html>

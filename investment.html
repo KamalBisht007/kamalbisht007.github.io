@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinAgent — Multi-Agent Investment Intelligence | Kamal Bisht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg:        #f5f6f8;
+  --bg2:       #ffffff;
+  --bg3:       #f1f3f6;
+  --surface:   #eef1f5;
+  --border:    rgba(0,0,0,0.09);
+  --gold:      #a05c00;
+  --gold2:     #7a4500;
+  --gold-dim:  rgba(160,92,0,0.07);
+  --gold-glow: rgba(160,92,0,0.13);
+  --teal:      #047a52;
+  --teal-dim:  rgba(4,122,82,0.07);
+  --red:       #dc2626;
+  --blue:      #2563eb;
+  --purple:    #7c3aed;
+  --text:      #111827;
+  --text2:     #374151;
+  --text3:     #6b7280;
+  --font-d:    'DM Serif Display', Georgia, serif;
+  --font-b:    'Outfit', sans-serif;
+  --font-m:    'DM Mono', monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-b);
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED GRID BG ── */
+body::before {
+  opacity: 0.5;
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(4,122,82,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(4,122,82,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ── TICKER TAPE ── */
+.ticker {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 32px;
+  background: rgba(245,246,248,0.97);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex; align-items: center;
+}
+.ticker-inner {
+  display: flex; gap: 3rem;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.tick-item {
+  font-family: var(--font-m); font-size: 0.65rem;
+  display: flex; align-items: center; gap: 0.4rem;
+  letter-spacing: 0.05em;
+}
+.tick-sym { color: var(--text2); }
+.tick-up   { color: #15803d; }
+.tick-down { color: #dc2626; }
+.tick-label { color: var(--text3); font-size: 0.6rem; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 32px; left: 0; right: 0; z-index: 90;
+  padding: 0.9rem 0;
+  background: rgba(245,246,248,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-logo {
+  font-family: var(--font-m); font-size: 0.8rem;
+  color: var(--gold); letter-spacing: 0.06em;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.nav-logo-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold2);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.nav-back {
+  font-family: var(--font-m); font-size: 0.72rem;
+  color: var(--text2); text-decoration: none;
+  display: flex; align-items: center; gap: 0.5rem;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--gold); }
+.nav-status {
+  font-family: var(--font-m); font-size: 0.68rem;
+  color: #15803d; display: flex; align-items: center; gap: 0.4rem;
+}
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #15803d;
+  animation: blink 1.8s ease-in-out infinite;
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 9rem 0 5rem;
+  position: relative;
+}
+.hero-glow {
+  position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+  width: 700px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(4,122,82,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+
+.hero-tag {
+  font-family: var(--font-m); font-size: 0.72rem;
+  color: var(--gold); letter-spacing: 0.15em; text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+
+h1.hero-name {
+  font-family: var(--font-d); font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  font-weight: 300; line-height: 1.0; color: var(--text);
+  margin-bottom: 1rem;
+}
+h1.hero-name em { font-style: italic; color: var(--gold); }
+h1.hero-name span { display: block; font-size: 0.55em; color: var(--text2); font-style: normal; margin-top: 0.5rem; letter-spacing: 0.02em; }
+
+.hero-desc {
+  font-size: 1rem; color: var(--text2); line-height: 1.8;
+  margin-bottom: 2rem;
+}
+.hero-desc strong { color: var(--text); font-weight: 400; }
+
+.hero-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.hero-pill {
+  font-family: var(--font-m); font-size: 0.68rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(160,92,0,0.22);
+  color: var(--gold); background: var(--gold-dim);
+  letter-spacing: 0.05em;
+}
+
+.wip-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-m); font-size: 0.7rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid rgba(21,128,61,0.3);
+  color: #15803d; background: rgba(21,128,61,0.06);
+}
+
+/* ── MINI CHART ── */
+.hero-chart {
+  background: var(--surface);
+  border: 1px solid rgba(160,92,0,0.15);
+  border-radius: 4px;
+  padding: 1.5rem;
+  position: relative;
+}
+.chart-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+.chart-title { font-family: var(--font-m); font-size: 0.7rem; color: var(--text3); letter-spacing: 0.08em; }
+.chart-val { font-family: var(--font-d); font-size: 1.8rem; color: var(--text); line-height: 1; }
+.chart-delta { font-family: var(--font-m); font-size: 0.72rem; color: #15803d; margin-top: 0.2rem; }
+.chart-svg { width: 100%; height: 90px; overflow: visible; }
+.chart-area { fill: url(#goldGrad); opacity: 0.3; }
+.chart-line { fill: none; stroke: var(--teal); stroke-width: 1.5; }
+.chart-dot { fill: var(--teal); }
+
+.agent-signals {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  margin-top: 1.25rem; padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.signal-row {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.signal-name { font-family: var(--font-m); font-size: 0.65rem; color: var(--text3); }
+.signal-bar-wrap { flex: 1; margin: 0 0.75rem; height: 3px; background: var(--bg3); border-radius: 2px; }
+.signal-bar { height: 100%; border-radius: 2px; }
+.signal-val { font-family: var(--font-m); font-size: 0.65rem; }
+.sig-buy { background: #15803d; }
+.sig-hold { background: var(--gold); }
+.sig-risk { background: var(--red); }
+
+/* ── SECTION HEADINGS ── */
+section { padding: 5rem 0; }
+.sec-label {
+  font-family: var(--font-m); font-size: 0.68rem;
+  color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(160,92,0,0.3), transparent); }
+h2.sec-h {
+  font-family: var(--font-d); font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300; line-height: 1.1; color: var(--text);
+  margin-bottom: 0.75rem;
+}
+h2.sec-h em { font-style: italic; color: var(--gold); }
+.sec-sub { font-size: 1rem; color: var(--text2); max-width: 620px; margin-bottom: 3rem; line-height: 1.7; }
+
+/* ── ARCHITECTURE / DATA FLOW ── */
+.arch-wrap { position: relative; }
+
+/* Flow diagram built entirely in HTML/CSS */
+.flow-diagram {
+  background: var(--bg2);
+  border: 1px solid rgba(160,92,0,0.12);
+  border-radius: 4px;
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.flow-diagram::before {
+  content: 'DATA FLOW ARCHITECTURE';
+  position: absolute; top: 1rem; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-m); font-size: 0.62rem;
+  color: var(--text3); letter-spacing: 0.2em;
+}
+
+/* 3-row layout: Sources → Agents → Outputs */
+.flow-row {
+  display: flex; justify-content: center; align-items: center;
+  gap: 0.5rem; flex-wrap: wrap;
+  position: relative;
+}
+.flow-row + .flow-row { margin-top: 1.5rem; }
+
+.flow-arrow-down {
+  display: flex; justify-content: center;
+  margin: 0.5rem 0; color: rgba(160,92,0,0.4);
+  font-size: 1.2rem; letter-spacing: 4px;
+}
+
+.flow-node {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.7rem 1rem;
+  text-align: center;
+  min-width: 110px;
+  position: relative;
+  transition: border-color 0.3s;
+}
+.flow-node:hover { border-color: rgba(160,92,0,0.4); }
+.flow-node.gold  { border-color: rgba(160,92,0,0.3); background: var(--gold-dim); }
+.flow-node.teal  { border-color: rgba(4,122,82,0.3); background: rgba(4,122,82,0.06); }
+.flow-node.blue  { border-color: rgba(37,99,235,0.3); background: rgba(37,99,235,0.06); }
+.flow-node.purple{ border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.06); }
+.flow-node.red   { border-color: rgba(220,38,38,0.3); background: rgba(220,38,38,0.06); }
+.flow-node-icon  { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.flow-node-title { font-family: var(--font-m); font-size: 0.68rem; color: var(--text); font-weight: 400; }
+.flow-node-sub   { font-size: 0.62rem; color: var(--text2); margin-top: 0.15rem; }
+
+.flow-connector {
+  color: var(--text3); font-size: 0.9rem;
+  display: flex; align-items: center;
+}
+
+.flow-label-row {
+  display: flex; justify-content: space-around;
+  margin-top: 0.25rem;
+}
+.flow-tier-label {
+  font-family: var(--font-m); font-size: 0.6rem;
+  color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase;
+  text-align: center; flex: 1;
+}
+
+/* ── AGENT CARDS ── */
+.agents-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+.agent-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.agent-card:hover { transform: translateY(-3px); }
+.agent-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.agent-card.gold-card  { }
+.agent-card.gold-card::before  { background: linear-gradient(to right, var(--gold), transparent); }
+.agent-card.teal-card::before  { background: linear-gradient(to right, var(--teal), transparent); }
+.agent-card.blue-card::before  { background: linear-gradient(to right, var(--blue), transparent); }
+.agent-card.purple-card::before{ background: linear-gradient(to right, var(--purple), transparent); }
+.agent-card.red-card::before   { background: linear-gradient(to right, var(--red), transparent); }
+.agent-card:hover { border-color: rgba(160,92,0,0.2); }
+
+.agent-num {
+  font-family: var(--font-d); font-size: 2.5rem; font-weight: 300;
+  color: rgba(160,92,0,0.12); line-height: 1; position: absolute; right: 1rem; top: 0.75rem;
+}
+.agent-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.agent-name { font-size: 0.95rem; font-weight: 500; color: var(--text); margin-bottom: 0.25rem; }
+.agent-role { font-family: var(--font-m); font-size: 0.68rem; color: var(--gold); margin-bottom: 0.75rem; letter-spacing: 0.04em; }
+.agent-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.7; }
+.agent-tools { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.75rem; }
+.agent-tool {
+  font-family: var(--font-m); font-size: 0.62rem;
+  padding: 0.15rem 0.5rem;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text3);
+}
+
+/* ── TECH STACK ── */
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.stack-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.stack-category {
+  font-family: var(--font-m); font-size: 0.65rem;
+  color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1rem; padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.stack-items { display: flex; flex-direction: column; gap: 0.6rem; }
+.stack-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+.stack-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.stack-info {}
+.stack-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+.stack-use  { font-size: 0.77rem; color: var(--text2); line-height: 1.5; }
+
+/* ── PRINCIPLES ── */
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.principle {
+  background: var(--bg2); border: 1px solid var(--border); padding: 1.5rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.principle-num { font-family: var(--font-d); font-size: 2rem; color: rgba(160,92,0,0.15); line-height: 1; margin-bottom: 0.5rem; }
+.principle-title { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; }
+.principle-desc { font-size: 0.8rem; color: var(--text2); line-height: 1.65; }
+
+/* ── STATUS BANNER ── */
+.status-banner {
+  background: linear-gradient(135deg, rgba(160,92,0,0.06), rgba(160,92,0,0.02));
+  border: 1px solid rgba(160,92,0,0.2);
+  border-radius: 4px; padding: 2rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.5rem;
+}
+.status-left {}
+.status-title { font-family: var(--font-d); font-size: 1.5rem; font-weight: 300; color: var(--text); margin-bottom: 0.25rem; }
+.status-sub { font-size: 0.88rem; color: var(--text2); }
+.status-items { display: flex; gap: 2rem; flex-wrap: wrap; }
+.status-item { text-align: center; }
+.status-val { font-family: var(--font-d); font-size: 1.8rem; color: var(--gold); line-height: 1; }
+.status-label { font-family: var(--font-m); font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
+
+/* ── FOOTER ── */
+footer { border-top: 1px solid var(--border); padding: 2.5rem 0; text-align: center; }
+.footer-back {
+  font-family: var(--font-m); font-size: 0.78rem;
+  color: var(--text2); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  transition: color 0.2s;
+}
+.footer-back:hover { color: var(--gold); }
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.shown { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .status-banner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER TAPE -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="tick-item"><span class="tick-sym">NIFTY50</span> <span class="tick-up">▲ 0.42%</span> <span class="tick-label">24,318</span></span>
+    <span class="tick-item"><span class="tick-sym">SENSEX</span> <span class="tick-up">▲ 0.38%</span> <span class="tick-label">80,124</span></span>
+    <span class="tick-item"><span class="tick-sym">RELIANCE</span> <span class="tick-down">▼ 0.21%</span> <span class="tick-label">2,941</span></span>
+    <span class="tick-item"><span class="tick-sym">TCS</span> <span class="tick-up">▲ 1.14%</span> <span class="tick-label">3,872</span></span>
+    <span class="tick-item"><span class="tick-sym">INFY</span> <span class="tick-up">▲ 0.67%</span> <span class="tick-label">1,628</span></span>
+    <span class="tick-item"><span class="tick-sym">HDFCBANK</span> <span class="tick-down">▼ 0.09%</span> <span class="tick-label">1,734</span></span>
+    <span class="tick-item"><span class="tick-sym">WIPRO</span> <span class="tick-up">▲ 0.55%</span> <span class="tick-label">478</span></span>
+    <span class="tick-item"><span class="tick-sym">BAJFINANCE</span> <span class="tick-up">▲ 1.32%</span> <span class="tick-label">7,218</span></span>
+    <span class="tick-item"><span class="tick-sym">ICICIBANK</span> <span class="tick-up">▲ 0.81%</span> <span class="tick-label">1,291</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="tick-item"><span class="tick-sym">NIFTY50</span> <span class="tick-up">▲ 0.42%</span> <span class="tick-label">24,318</span></span>
+    <span class="tick-item"><span class="tick-sym">SENSEX</span> <span class="tick-up">▲ 0.38%</span> <span class="tick-label">80,124</span></span>
+    <span class="tick-item"><span class="tick-sym">RELIANCE</span> <span class="tick-down">▼ 0.21%</span> <span class="tick-label">2,941</span></span>
+    <span class="tick-item"><span class="tick-sym">TCS</span> <span class="tick-up">▲ 1.14%</span> <span class="tick-label">3,872</span></span>
+    <span class="tick-item"><span class="tick-sym">INFY</span> <span class="tick-up">▲ 0.67%</span> <span class="tick-label">1,628</span></span>
+    <span class="tick-item"><span class="tick-sym">HDFCBANK</span> <span class="tick-down">▼ 0.09%</span> <span class="tick-label">1,734</span></span>
+    <span class="tick-item"><span class="tick-sym">WIPRO</span> <span class="tick-up">▲ 0.55%</span> <span class="tick-label">478</span></span>
+    <span class="tick-item"><span class="tick-sym">BAJFINANCE</span> <span class="tick-up">▲ 1.32%</span> <span class="tick-label">7,218</span></span>
+    <span class="tick-item"><span class="tick-sym">ICICIBANK</span> <span class="tick-up">▲ 0.81%</span> <span class="tick-label">1,291</span></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-dot"></div>
+      FinAgent · Multi-Agent Investment Intelligence
+    </div>
+    <div class="nav-status"><div class="status-dot"></div> Active Development</div>
+    <a class="nav-back" href="index.html">← Back to Portfolio</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-glow"></div>
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag">Personal Research Project</div>
+        <h1 class="hero-name">
+          <em>FinAgent</em>
+          <span>Multi-Agent Investment Intelligence System</span>
+        </h1>
+        <p class="hero-desc">
+          A personal research project exploring how <strong>multi-agent AI architectures</strong> can be applied to Indian equity markets — combining real-time market data, fundamental analysis, technical signals, and risk modelling into a coordinated intelligence layer.
+        </p>
+        <p class="hero-desc">
+          Built with <strong>Claude Code</strong> as the agentic backbone, <strong>Google Colab</strong> as the compute environment, and <strong>XTS APIs</strong> for live market connectivity. This is an exploration of applied AI engineering — not financial advice.
+        </p>
+        <div class="hero-pills">
+          <span class="hero-pill">Claude Code</span>
+          <span class="hero-pill">Google Colab</span>
+          <span class="hero-pill">XTS Market APIs</span>
+          <span class="hero-pill">Python</span>
+          <span class="hero-pill">Multi-Agent</span>
+          <span class="hero-pill">NSE / BSE</span>
+        </div>
+        <div class="wip-badge">
+          <div class="status-dot"></div>
+          Work in Progress · Private Repository
+        </div>
+      </div>
+
+      <!-- MOCK DASHBOARD CARD -->
+      <div class="hero-chart">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">PORTFOLIO SIGNAL · NIFTY50</div>
+            <div class="chart-val">↑ 3.2%</div>
+            <div class="chart-delta">▲ Agents consensus: BUY</div>
+          </div>
+          <div style="font-family: var(--font-m); font-size: 0.62rem; color: var(--text3); text-align:right;">
+            Simulated output<br>Not live trading
+          </div>
+        </div>
+
+        <svg class="chart-svg" viewBox="0 0 340 90" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#047a52" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#047a52" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path class="chart-area" d="M0,70 L30,65 L60,60 L90,55 L110,50 L130,45 L150,48 L170,38 L190,30 L210,25 L230,20 L260,15 L290,10 L320,8 L340,5 L340,90 L0,90 Z"/>
+          <path class="chart-line" d="M0,70 L30,65 L60,60 L90,55 L110,50 L130,45 L150,48 L170,38 L190,30 L210,25 L230,20 L260,15 L290,10 L320,8 L340,5"/>
+          <circle class="chart-dot" cx="340" cy="5" r="3"/>
+        </svg>
+
+        <div class="agent-signals">
+          <div class="signal-row">
+            <span class="signal-name">FUNDAMENTAL AGENT</span>
+            <div class="signal-bar-wrap"><div class="signal-bar sig-buy" style="width:78%"></div></div>
+            <span class="signal-val" style="color:#15803d">BUY 78</span>
+          </div>
+          <div class="signal-row">
+            <span class="signal-name">TECHNICAL AGENT</span>
+            <div class="signal-bar-wrap"><div class="signal-bar sig-buy" style="width:65%"></div></div>
+            <span class="signal-val" style="color:#15803d">BUY 65</span>
+          </div>
+          <div class="signal-row">
+            <span class="signal-name">SENTIMENT AGENT</span>
+            <div class="signal-bar-wrap"><div class="signal-bar sig-hold" style="width:52%"></div></div>
+            <span class="signal-val" style="color:var(--gold)">HOLD 52</span>
+          </div>
+          <div class="signal-row">
+            <span class="signal-name">RISK AGENT</span>
+            <div class="signal-bar-wrap"><div class="signal-bar sig-risk" style="width:28%"></div></div>
+            <span class="signal-val" style="color:var(--red)">RISK 28</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA FLOW ARCHITECTURE -->
+<section id="architecture">
+  <div class="container">
+    <div class="sec-label">System Design</div>
+    <h2 class="sec-h">Data flow <em>architecture.</em></h2>
+    <p class="sec-sub">A four-layer pipeline: live market data ingestion → specialised AI agents → orchestration → decision output. Each agent operates independently and reports to a central orchestrator.</p>
+
+    <div class="flow-diagram reveal">
+
+      <!-- LAYER 1: DATA SOURCES -->
+      <div style="text-align:center; font-family: var(--font-m); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.14em; margin-bottom: 0.75rem; margin-top: 0.5rem;">── LAYER 1 · DATA SOURCES ──</div>
+      <div class="flow-row">
+        <div class="flow-node gold">
+          <div class="flow-node-icon">📡</div>
+          <div class="flow-node-title">XTS APIs</div>
+          <div class="flow-node-sub">Live quotes · Order book</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node blue">
+          <div class="flow-node-icon">📰</div>
+          <div class="flow-node-title">News & Filings</div>
+          <div class="flow-node-sub">NSE · BSE · RSS feeds</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node teal">
+          <div class="flow-node-icon">📊</div>
+          <div class="flow-node-title">Historical Data</div>
+          <div class="flow-node-sub">OHLCV · Fundamentals</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node purple">
+          <div class="flow-node-icon">🌐</div>
+          <div class="flow-node-title">Macro Signals</div>
+          <div class="flow-node-sub">RBI · FII/DII flows</div>
+        </div>
+      </div>
+
+      <div class="flow-arrow-down">↓ &nbsp; ↓ &nbsp; ↓ &nbsp; ↓</div>
+
+      <!-- LAYER 2: PROCESSING -->
+      <div style="text-align:center; font-family: var(--font-m); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.14em; margin-bottom: 0.75rem;">── LAYER 2 · GOOGLE COLAB · PYTHON RUNTIME ──</div>
+      <div class="flow-row">
+        <div class="flow-node">
+          <div class="flow-node-icon">🔄</div>
+          <div class="flow-node-title">Data Normaliser</div>
+          <div class="flow-node-sub">Pandas · Cleaning</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node">
+          <div class="flow-node-icon">📐</div>
+          <div class="flow-node-title">Feature Engineering</div>
+          <div class="flow-node-sub">TA-Lib · Indicators</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node">
+          <div class="flow-node-icon">🗄️</div>
+          <div class="flow-node-title">Context Store</div>
+          <div class="flow-node-sub">SQLite · Vector DB</div>
+        </div>
+      </div>
+
+      <div class="flow-arrow-down">↓ &nbsp; ↓ &nbsp; ↓</div>
+
+      <!-- LAYER 3: AI AGENTS -->
+      <div style="text-align:center; font-family: var(--font-m); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.14em; margin-bottom: 0.75rem;">── LAYER 3 · CLAUDE CODE · MULTI-AGENT LAYER ──</div>
+      <div class="flow-row">
+        <div class="flow-node gold">
+          <div class="flow-node-icon">🔍</div>
+          <div class="flow-node-title">Fundamental Agent</div>
+          <div class="flow-node-sub">P/E · EPS · Debt analysis</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node teal">
+          <div class="flow-node-icon">📈</div>
+          <div class="flow-node-title">Technical Agent</div>
+          <div class="flow-node-sub">RSI · MACD · Patterns</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node blue">
+          <div class="flow-node-icon">🧠</div>
+          <div class="flow-node-title">Sentiment Agent</div>
+          <div class="flow-node-sub">NLP · News scoring</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node red">
+          <div class="flow-node-icon">⚠️</div>
+          <div class="flow-node-title">Risk Agent</div>
+          <div class="flow-node-sub">VaR · Drawdown · Beta</div>
+        </div>
+      </div>
+
+      <div class="flow-arrow-down">↓ &nbsp; ↓ &nbsp; ↓ &nbsp; ↓</div>
+
+      <!-- LAYER 4: ORCHESTRATOR + OUTPUT -->
+      <div style="text-align:center; font-family: var(--font-m); font-size: 0.6rem; color: var(--text3); letter-spacing: 0.14em; margin-bottom: 0.75rem;">── LAYER 4 · ORCHESTRATOR + OUTPUT ──</div>
+      <div class="flow-row">
+        <div class="flow-node gold" style="min-width: 160px;">
+          <div class="flow-node-icon">🎯</div>
+          <div class="flow-node-title">Orchestrator Agent</div>
+          <div class="flow-node-sub">Claude · Signal synthesis</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node teal" style="min-width: 130px;">
+          <div class="flow-node-icon">📋</div>
+          <div class="flow-node-title">Research Report</div>
+          <div class="flow-node-sub">Auto-generated PDF</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node blue" style="min-width: 130px;">
+          <div class="flow-node-icon">🔔</div>
+          <div class="flow-node-title">Alerts & Signals</div>
+          <div class="flow-node-sub">Telegram · Email</div>
+        </div>
+        <div class="flow-connector">→</div>
+        <div class="flow-node purple" style="min-width: 130px;">
+          <div class="flow-node-icon">📊</div>
+          <div class="flow-node-title">Dashboard</div>
+          <div class="flow-node-sub">Colab · Streamlit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI AGENTS -->
+<section id="agents">
+  <div class="container">
+    <div class="sec-label">Agent Design</div>
+    <h2 class="sec-h">Five specialised <em>AI agents.</em></h2>
+    <p class="sec-sub">Each agent has a narrow focus and a well-defined context window. They communicate through structured outputs to a central orchestrator that synthesises a final recommendation.</p>
+
+    <div class="agents-grid">
+      <div class="agent-card gold-card reveal">
+        <div class="agent-num">01</div>
+        <div class="agent-icon">🔍</div>
+        <div class="agent-name">Fundamental Agent</div>
+        <div class="agent-role">Value & Quality Analysis</div>
+        <div class="agent-desc">Evaluates P/E ratios, EPS growth, debt-to-equity, promoter holding, and quarterly result trends. Scores stocks on fundamental quality against sector peers.</div>
+        <div class="agent-tools"><span class="agent-tool">NSE Filings</span><span class="agent-tool">Screener</span><span class="agent-tool">Pandas</span></div>
+      </div>
+      <div class="agent-card teal-card reveal">
+        <div class="agent-num">02</div>
+        <div class="agent-icon">📈</div>
+        <div class="agent-name">Technical Agent</div>
+        <div class="agent-role">Price & Momentum Analysis</div>
+        <div class="agent-desc">Analyses RSI, MACD, Bollinger Bands, moving averages, volume patterns, and support/resistance levels. Detects breakout and reversal patterns.</div>
+        <div class="agent-tools"><span class="agent-tool">XTS APIs</span><span class="agent-tool">TA-Lib</span><span class="agent-tool">OHLCV</span></div>
+      </div>
+      <div class="agent-card blue-card reveal">
+        <div class="agent-num">03</div>
+        <div class="agent-icon">🧠</div>
+        <div class="agent-name">Sentiment Agent</div>
+        <div class="agent-role">News & Social Intelligence</div>
+        <div class="agent-desc">Processes financial news, exchange announcements, and analyst reports using NLP. Generates a sentiment score that flags positive/negative catalysts.</div>
+        <div class="agent-tools"><span class="agent-tool">Claude NLP</span><span class="agent-tool">RSS</span><span class="agent-tool">BSE Filings</span></div>
+      </div>
+      <div class="agent-card red-card reveal">
+        <div class="agent-num">04</div>
+        <div class="agent-icon">⚠️</div>
+        <div class="agent-name">Risk Agent</div>
+        <div class="agent-role">Portfolio Risk Management</div>
+        <div class="agent-desc">Computes Value-at-Risk, beta, max drawdown, sector concentration, and correlation matrix. Flags position sizing constraints before signals are acted on.</div>
+        <div class="agent-tools"><span class="agent-tool">SciPy</span><span class="agent-tool">NumPy</span><span class="agent-tool">VaR models</span></div>
+      </div>
+      <div class="agent-card purple-card reveal">
+        <div class="agent-num">05</div>
+        <div class="agent-icon">🎯</div>
+        <div class="agent-name">Orchestrator Agent</div>
+        <div class="agent-role">Signal Synthesis & Decision</div>
+        <div class="agent-desc">The master Claude agent. Receives structured outputs from all four agents, resolves conflicts, applies weighting logic, and produces a final recommendation with reasoning trace.</div>
+        <div class="agent-tools"><span class="agent-tool">Claude Code</span><span class="agent-tool">Tool use</span><span class="agent-tool">Chain-of-thought</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="sec-label">Technical Stack</div>
+    <h2 class="sec-h">Built with the <em>right tools.</em></h2>
+    <p class="sec-sub">Technology choices driven by accessibility, cost, and production-readiness — designed to be portable from a Colab notebook to a cloud deployment.</p>
+
+    <div class="stack-grid">
+      <div class="stack-card reveal">
+        <div class="stack-category">AI & Orchestration</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">🤖</div><div class="stack-info"><div class="stack-name">Claude Code (Anthropic)</div><div class="stack-use">Agentic backbone — tool use, multi-step reasoning, structured outputs, chain-of-thought orchestration</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🔗</div><div class="stack-info"><div class="stack-name">Multi-Agent Framework</div><div class="stack-use">Custom orchestrator pattern with specialised sub-agents and context handoffs</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🧮</div><div class="stack-info"><div class="stack-name">LLM-as-Judge</div><div class="stack-use">Using Claude to evaluate and score agent outputs before synthesis</div></div></div>
+        </div>
+      </div>
+      <div class="stack-card reveal">
+        <div class="stack-category">Data & Market Connectivity</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">📡</div><div class="stack-info"><div class="stack-name">XTS Interactive APIs</div><div class="stack-use">Real-time quotes, order book depth, historical OHLCV, market depth for NSE/BSE</div></div></div>
+          <div class="stack-item"><div class="stack-icon">📊</div><div class="stack-info"><div class="stack-name">TA-Lib + Pandas</div><div class="stack-use">Technical indicator computation, data normalisation and feature engineering</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🗄️</div><div class="stack-info"><div class="stack-name">SQLite + Vector Store</div><div class="stack-use">Persistent context store for agent memory and semantic similarity search</div></div></div>
+        </div>
+      </div>
+      <div class="stack-card reveal">
+        <div class="stack-category">Compute & Infrastructure</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">☁️</div><div class="stack-info"><div class="stack-name">Google Colab</div><div class="stack-use">Primary compute environment — GPU access, scheduled notebooks, Drive integration</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🐍</div><div class="stack-info"><div class="stack-name">Python 3.11+</div><div class="stack-use">Core language — asyncio for concurrent agent execution, type-annotated throughout</div></div></div>
+          <div class="stack-item"><div class="stack-icon">📬</div><div class="stack-info"><div class="stack-name">Telegram Bot + Email</div><div class="stack-use">Signal delivery layer — real-time alerts with full reasoning context</div></div></div>
+        </div>
+      </div>
+      <div class="stack-card reveal">
+        <div class="stack-category">Quality & Reliability</div>
+        <div class="stack-items">
+          <div class="stack-item"><div class="stack-icon">✅</div><div class="stack-info"><div class="stack-name">Golden Dataset Testing</div><div class="stack-use">Historical signal backtesting against known market events to validate agent accuracy</div></div></div>
+          <div class="stack-item"><div class="stack-icon">🔄</div><div class="stack-info"><div class="stack-name">A/B Signal Testing</div><div class="stack-use">Parallel agent configurations run against the same data to compare recommendation quality</div></div></div>
+          <div class="stack-item"><div class="stack-icon">📝</div><div class="stack-info"><div class="stack-name">Reasoning Traces</div><div class="stack-use">Every agent decision is logged with full chain-of-thought for auditability</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGINEERING PRINCIPLES -->
+<section id="principles">
+  <div class="container">
+    <div class="sec-label">Engineering Approach</div>
+    <h2 class="sec-h">Principles that <em>guide the build.</em></h2>
+    <p class="sec-sub">24 years of quality engineering applied to AI system design — the same discipline, a new domain.</p>
+
+    <div class="principles">
+      <div class="principle reveal">
+        <div class="principle-num">01</div>
+        <div class="principle-title">Narrow agents, wide system</div>
+        <div class="principle-desc">Each agent has a single responsibility. Complexity emerges from composition, not from individual agents trying to do everything.</div>
+      </div>
+      <div class="principle reveal">
+        <div class="principle-num">02</div>
+        <div class="principle-title">Reasoning over rules</div>
+        <div class="principle-desc">Agents reason about context rather than follow hardcoded rules. The system adapts to market regime changes without manual tuning.</div>
+      </div>
+      <div class="principle reveal">
+        <div class="principle-num">03</div>
+        <div class="principle-title">Auditability first</div>
+        <div class="principle-desc">Every signal carries its full reasoning trace. Drawing from QA roots — if you can't explain a decision, you can't trust it in production.</div>
+      </div>
+      <div class="principle reveal">
+        <div class="principle-num">04</div>
+        <div class="principle-title">Risk before reward</div>
+        <div class="principle-desc">The Risk Agent is a hard gate. No signal reaches the orchestrator without passing risk constraints — position sizing beats signal quality.</div>
+      </div>
+      <div class="principle reveal">
+        <div class="principle-num">05</div>
+        <div class="principle-title">Golden dataset validation</div>
+        <div class="principle-desc">Agent outputs are continuously validated against historical events where correct signals are known — the same pattern as QA efficacy labs.</div>
+      </div>
+      <div class="principle reveal">
+        <div class="principle-num">06</div>
+        <div class="principle-title">Research, not automation</div>
+        <div class="principle-desc">This is a decision-support system. Final trading decisions remain human. The system surfaces insights; the human acts on them.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATUS BANNER -->
+<section>
+  <div class="container">
+    <div class="status-banner reveal">
+      <div class="status-left">
+        <div class="status-title">Currently in active development</div>
+        <div class="status-sub">Private repository · Personal research project · Not financial advice</div>
+      </div>
+      <div class="status-items">
+        <div class="status-item"><div class="status-val">5</div><div class="status-label">AI Agents</div></div>
+        <div class="status-item"><div class="status-val">4</div><div class="status-label">Data Sources</div></div>
+        <div class="status-item"><div class="status-val">NSE</div><div class="status-label">Market</div></div>
+        <div class="status-item"><div class="status-val">WIP</div><div class="status-label">Status</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <a class="footer-back" href="index.html">← Back to Kamal Bisht's Portfolio</a>
+    <p style="font-family: var(--font-m); font-size: 0.65rem; color: var(--text3); margin-top: 0.75rem;">
+      For educational and research purposes only. Not financial advice. No trading signals are made public.
+    </p>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('shown'), i * 100);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Animate chart line draw
+const chartLine = document.querySelector('.chart-line');
+const chartArea = document.querySelector('.chart-area');
+if (chartLine) {
+  const len = chartLine.getTotalLength ? chartLine.getTotalLength() : 600;
+  chartLine.style.strokeDasharray = len;
+  chartLine.style.strokeDashoffset = len;
+  setTimeout(() => {
+    chartLine.style.transition = 'stroke-dashoffset 2s ease';
+    chartLine.style.strokeDashoffset = '0';
+  }, 600);
+}
+
+// Animate signal bars
+document.querySelectorAll('.signal-bar').forEach((bar, i) => {
+  const w = bar.style.width;
+  bar.style.width = '0%';
+  setTimeout(() => {
+    bar.style.transition = 'width 1s ease';
+    bar.style.width = w;
+  }, 900 + i * 150);
+});
+</script>
+</body>
+</html>

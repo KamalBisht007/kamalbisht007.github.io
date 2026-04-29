@@ -478,6 +478,29 @@
     .hero-stats { gap: 1.5rem; }
     nav .nav-links { display: none; }
   }
+
+  .presentation-btn {
+    display: inline-flex; align-items: center; gap: 0.65rem;
+    margin-top: 2rem;
+    padding: 0.75rem 1.75rem;
+    background: var(--teal);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.2s;
+    font-weight: 500;
+  }
+  .presentation-btn:hover {
+    background: #0F6E56;
+    transform: translateY(-2px);
+  }
+  .presentation-btn svg {
+    width: 15px; height: 15px;
+  }
 </style>
 </head>
 <body>
@@ -529,6 +552,22 @@
           <div class="stat-label">Manual test reduction</div>
         </div>
       </div>
+
+      <div style="margin-top:2rem; display:flex; flex-wrap:wrap; gap:0.75rem;">
+        <a class="presentation-btn" href="kamal_animated.html" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="5,3 19,12 5,21"/>
+          </svg>
+          View Animated Presentation
+        </a>
+        <a class="presentation-btn" href="investment.html" target="_blank" style="background:#0a5c45;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+          </svg>
+          FinAgent &mdash; AI Investment Research
+        </a>
+      </div>
+
     </div>
   </div>
 </section>
@@ -578,12 +617,10 @@
         <div class="tl-dot"></div>
         <div class="tl-header">
           <div>
-            <div class="tl-role">CTO (Consulting)</div>
-            <div class="tl-co">DigiFortex Technologies Pvt Ltd</div>
+            <div class="tl-role">Consulting Services</div>
           </div>
-          <div class="tl-dates">Nov 2025 – Mar 2026</div>
         </div>
-        <div class="tl-body">Defined product vision and multi-phase roadmap for a Unified Cyber & AI Command Centre — converging SOC, GRC, AI Governance, Exposure Management, and cryptographic validation into a telemetry-driven, AI-native risk ecosystem. Implemented VPN governance architecture, Action1-based endpoint management, and initiated FIPS 140-3 Level 2 lab for post-quantum cryptography services.</div>
+        <div class="tl-body">Defined product vision and multi-phase roadmap of a Unified Cyber & AI Command Centre for startup named DigiFortex Technologies (Dec 2025-March 2026). Platform converges SOC, GRC, AI Governance, Exposure Management, and cryptographic validation into a telemetry-driven, AI-native risk ecosystem. Implemented VPN governance architecture, Action1-based endpoint management, and initiated FIPS 140-3 Level 2 lab for post-quantum cryptography services.</div>
         <div class="tl-tags">
           <span class="tl-tag">Product vision</span>
           <span class="tl-tag">AI governance</span>
