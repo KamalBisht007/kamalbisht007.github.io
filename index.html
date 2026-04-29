@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kamal Bisht — Engineering Leader | Quality & Cybersecurity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --bg2: #ffffff;
+    --bg3: #f1f3f6;
+    --surface: #eef1f5;
+    --border: rgba(0,0,0,0.09);
+    --border-accent: rgba(4,130,80,0.35);
+    --teal: #047a52;
+    --teal-dim: rgba(4,122,82,0.08);
+    --teal-mid: rgba(4,122,82,0.15);
+    --amber: #b06000;
+    --amber-dim: rgba(176,96,0,0.08);
+    --text: #111827;
+    --text2: #374151;
+    --text3: #6b7280;
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.15;
+  }
+
+  /* ── GRID BG ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(14,220,150,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(4,122,82,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.5;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 0;
+    background: rgba(248,249,251,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .inner {
+    max-width: 1100px; margin: 0 auto; padding: 0 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text2);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 0 4rem;
+    position: relative;
+  }
+  .hero-glow {
+    position: absolute; top: 20%; right: -10%;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(4,122,82,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--teal);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: inline-block; width: 32px; height: 1px;
+    background: var(--teal);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text2);
+    max-width: 580px;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+  .cred-pills {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin-bottom: 3rem;
+  }
+  .pill {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--border-accent);
+    border-radius: 2px;
+    color: var(--teal);
+    background: var(--teal-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .hero-stats {
+    display: flex; gap: 3rem;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--teal); }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 0; }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--teal);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border-accent), transparent);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text);
+    margin-bottom: 3rem;
+    line-height: 1.1;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--text2);
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+  .about-aside { display: flex; flex-direction: column; gap: 1rem; }
+  .aside-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--teal);
+    padding: 1.25rem 1.5rem;
+    border-radius: 2px;
+  }
+  .aside-card-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .aside-card-val {
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  /* ── EXPERIENCE ── */
+  .timeline { position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--teal), rgba(4,122,82,0.1));
+  }
+  .tl-item {
+    padding-left: 2.5rem;
+    position: relative;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .tl-item.visible { opacity: 1; transform: translateY(0); }
+  .tl-dot {
+    position: absolute; left: -5px; top: 6px;
+    width: 11px; height: 11px; border-radius: 50%;
+    background: #f8f9fb;
+    border: 2px solid var(--teal);
+    box-shadow: 0 0 10px rgba(4,122,82,0.25);
+  }
+  .tl-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .tl-role {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .tl-co {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--teal);
+    margin-top: 0.15rem;
+  }
+  .tl-dates {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text3);
+    white-space: nowrap;
+    margin-top: 0.25rem;
+  }
+  .tl-body {
+    font-size: 0.95rem;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+  .tl-tags {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin-top: 0.85rem;
+  }
+  .tl-tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge-acquired {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.2rem 0.7rem;
+    background: var(--amber-dim);
+    border: 1px solid rgba(240,165,0,0.3);
+    color: var(--amber);
+    border-radius: 2px;
+    margin-left: 0.75rem;
+    vertical-align: middle;
+  }
+
+  /* ── COMPETENCIES ── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .comp-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.75rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: border-color 0.3s, transform 0.3s;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+  }
+  .comp-card.visible { opacity: 1; transform: translateY(0); }
+  .comp-card:hover { border-color: var(--border-accent); }
+  .comp-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .comp-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+  .comp-list {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.8;
+  }
+
+  /* ── ACCOMPLISHMENTS ── */
+  .acc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+  .acc-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.75rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+  }
+  .acc-card.visible { opacity: 1; transform: translateY(0); }
+  .acc-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--teal), rgba(4,122,82,0.0));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .acc-card:hover { border-color: var(--border-accent); }
+  .acc-card:hover::before { opacity: 1; }
+  .acc-num {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    color: var(--teal);
+    opacity: 0.25;
+    line-height: 1;
+    margin-bottom: 0.75rem;
+  }
+  .acc-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .acc-body {
+    font-size: 0.87rem;
+    color: var(--text2);
+    line-height: 1.75;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .edu-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .edu-deg {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .edu-school {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--teal);
+    margin-bottom: 0.75rem;
+  }
+  .edu-thesis {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* ── CERTS ── */
+  .cert-row {
+    display: flex; flex-wrap: wrap; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .cert-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 0.85rem;
+  }
+  .cert-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 8px rgba(4,122,82,0.3);
+    flex-shrink: 0;
+  }
+  .cert-name { font-size: 0.9rem; color: var(--text); }
+  .cert-issuer { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text3); margin-top: 0.1rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 0;
+    text-align: center;
+  }
+  .footer-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .footer-contact {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+  .footer-contact a { color: var(--teal); text-decoration: none; }
+
+  /* ── SCROLL ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-content > * {
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.55s; }
+  .hero-content > *:nth-child(5) { animation-delay: 0.7s; }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .edu-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 1.5rem; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <span class="nav-logo">kb.engineering</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#competencies">Skills</a>
+      <a href="#accomplishments">Impact</a>
+      <a href="#education">Education</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Engineering Leader · Bengaluru, India</div>
+      <h1>Kamal<br><em>Bisht</em></h1>
+      <p class="hero-sub">24+ years building quality, security, and platform engineering functions in cybersecurity — from kernel drivers to cloud-native microservices, from threat modelling to AI governance.</p>
+      <div class="cred-pills">
+        <span class="pill">PMP</span>
+        <span class="pill">CEH</span>
+        <span class="pill">ISO 42001 LA</span>
+        <span class="pill">IIT Delhi M.Tech</span>
+        <span class="pill">SentinelOne · McAfee · FireEye</span>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">24<span>+</span></div>
+          <div class="stat-label">Years experience</div>
+        </div>
+        <div>
+          <div class="stat-num">$616<span>M</span></div>
+          <div class="stat-label">Acquisition (Attivo)</div>
+        </div>
+        <div>
+          <div class="stat-num">20<span>+</span></div>
+          <div class="stat-label">Engineers led</div>
+        </div>
+        <div>
+          <div class="stat-num">70<span>%</span></div>
+          <div class="stat-label">Manual test reduction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-label">Who I am</div>
+    <h2>The signal in the noise.</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>My career has a single throughline: <strong>measurement-first thinking applied to complex security systems.</strong> It started at IIT Delhi, where my M.Tech. project used GSOM neural networks to statistically prove that malicious network traffic is inherently separable from normal traffic — an early exercise in finding signal in noise that shaped everything that followed.</p>
+        <p>Across McAfee, FireEye, Attivo Networks, and SentinelOne, I've built quality engineering functions from scratch, owned release management, run AppSec programmes, and driven cloud-native migrations. I've shipped kernel-level security products, built efficacy labs running millions of malware samples, and led the architectural shift from monolith to true cloud-native SaaS.</p>
+        <p>I think about quality not as a gate at the end of development, but as a <strong>layered discipline</strong> spanning infrastructure, security, automation, and delivery velocity. The frameworks I build outlast me.</p>
+        <p>Today I'm focused at the intersection of <strong>AI governance and cybersecurity</strong> — ISO 42001 Lead Auditor certified, exploring multi-agent AI systems, and applying LLM-based approaches to dynamic test generation and automation failure analysis.</p>
+      </div>
+      <div class="about-aside">
+        <div class="aside-card">
+          <div class="aside-card-label">Current focus</div>
+          <div class="aside-card-val">AI/LLM engineering · Multi-agent systems · ISO 42001 audit · Post-quantum cryptography</div>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-label">Domain expertise</div>
+          <div class="aside-card-val">Endpoint security · Deception / ITDR · Identity protection · Kernel / driver QA · Cloud-native SaaS</div>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-label">Leadership style</div>
+          <div class="aside-card-val">Build teams from zero · Own across functions · Framework-first · Culture of continuous improvement</div>
+        </div>
+        <div class="aside-card">
+          <div class="aside-card-label">Contact</div>
+          <div class="aside-card-val">kamalbisht@yahoo.com · +91-9845229450</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-label">Career history</div>
+    <h2>Where I've built.</h2>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div>
+            <div class="tl-role">CTO (Consulting)</div>
+            <div class="tl-co">DigiFortex Technologies Pvt Ltd</div>
+          </div>
+          <div class="tl-dates">Nov 2025 – Mar 2026</div>
+        </div>
+        <div class="tl-body">Defined product vision and multi-phase roadmap for a Unified Cyber & AI Command Centre — converging SOC, GRC, AI Governance, Exposure Management, and cryptographic validation into a telemetry-driven, AI-native risk ecosystem. Implemented VPN governance architecture, Action1-based endpoint management, and initiated FIPS 140-3 Level 2 lab for post-quantum cryptography services.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Product vision</span>
+          <span class="tl-tag">AI governance</span>
+          <span class="tl-tag">GRC</span>
+          <span class="tl-tag">FIPS 140-3</span>
+          <span class="tl-tag">Post-quantum crypto</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div>
+            <div class="tl-role">Director — Quality, AppSec & Release Engineering <span class="badge-acquired">$616.5M Acquisition</span></div>
+            <div class="tl-co">Attivo Networks → SentinelOne</div>
+          </div>
+          <div class="tl-dates">Jan 2017 – Oct 2025</div>
+        </div>
+        <div class="tl-body">Among the first 30 employees. Built QA department from zero — hired and mentored 20+ engineers across four groups. Simultaneously owned Quality, AppSec, IT, and Release Management. Drove the full cloud-native migration: Kafka telemetry pipeline, OCSF normalisation, ECS microservices, ClickHouse, GLU, KCP. Led deception technology (lateral movement detection) and ITDR domains covering Active Directory, Azure Entra ID, Okta, Duo, Ping, and 27+ integrations. Reduced manual testing 70%, production defects 35%, and release cycle time 25%.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Deception / ITDR</span>
+          <span class="tl-tag">Kafka</span>
+          <span class="tl-tag">ECS microservices</span>
+          <span class="tl-tag">SAST/DAST</span>
+          <span class="tl-tag">Release management</span>
+          <span class="tl-tag">Active Directory</span>
+          <span class="tl-tag">Python</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div>
+            <div class="tl-role">Engineering QA Manager</div>
+            <div class="tl-co">FireEye Cybersecurity (now Trellix)</div>
+          </div>
+          <div class="tl-dates">Feb 2016 – Dec 2016</div>
+        </div>
+        <div class="tl-body">Managed four parallel enterprise endpoint projects: exploit detection, kernel services, and next-generation platform initiatives. Built efficacy lab infrastructure running millions of malware samples for content detection validation — Elasticsearch-backed pipeline with Python automation.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Exploit detection</span>
+          <span class="tl-tag">Efficacy lab</span>
+          <span class="tl-tag">Elasticsearch</span>
+          <span class="tl-tag">Python</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div>
+            <div class="tl-role">Engineering QA Manager <span class="badge-acquired">$7.68B Intel Acquisition</span></div>
+            <div class="tl-co">McAfee (An Intel Company)</div>
+          </div>
+          <div class="tl-dates">Jun 2003 – Jan 2016</div>
+        </div>
+        <div class="tl-body">11+ years across AV/anti-spam, Host IPS (kernel drivers, TDI/WFP, ELAM), and McAfee Labs common driver SDK — shared across 25 products. Founded Security Club; drove systematic threat modelling across all India-managed products; built Security Champions programme absorbed into McAfee's global scheme. Built sanity lab covering all 25 products as a release gate. Championed cross-functional collaboration; 25% release cycle improvement.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Kernel drivers</span>
+          <span class="tl-tag">Threat modelling</span>
+          <span class="tl-tag">TDI / WFP / ELAM</span>
+          <span class="tl-tag">Ruby on Rails</span>
+          <span class="tl-tag">Coverity</span>
+          <span class="tl-tag">Security champions</span>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-header">
+          <div>
+            <div class="tl-role">Software Engineer</div>
+            <div class="tl-co">i2 Technologies</div>
+          </div>
+          <div class="tl-dates">Feb 2002 – May 2003</div>
+        </div>
+        <div class="tl-body">End-to-end automation engineer for supply chain management (SCM/SRM) solutions — the role that revealed how QA provides a solution-level vantage point no other function does.</div>
+        <div class="tl-tags">
+          <span class="tl-tag">Perl</span>
+          <span class="tl-tag">TCL/Tk</span>
+          <span class="tl-tag">Automation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPETENCIES -->
+<section id="competencies">
+  <div class="container">
+    <div class="section-label">Expertise</div>
+    <h2>What I bring.</h2>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-icon">⚙️</div>
+        <div class="comp-title">Quality Engineering</div>
+        <div class="comp-list">Automation frameworks (layered: infra → SDK → test) · CI/CD pipelines · Shift-left testing · Maturity models · LLM-as-judge · A/B testing · Golden datasets · Dynamic test generation</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon">🛡️</div>
+        <div class="comp-title">Application Security</div>
+        <div class="comp-list">Threat modelling · SAST (SonarQube, Coverity) · DAST (RAPID7, Nessus) · BurpSuite · Credential leak scanning (GitHub Actions) · Security champions programmes</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon">☁️</div>
+        <div class="comp-title">Cloud & Platform</div>
+        <div class="comp-list">Kafka · ECS microservices · ClickHouse · Elasticsearch / OpenSearch · Kubernetes (KCP/KOPS) · WebSocket · NLB/ALB · Feature flags · Shadow mode · Stateless service design</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon">🤖</div>
+        <div class="comp-title">AI / ML Engineering</div>
+        <div class="comp-list">LLM integration · Multi-agent systems · Claude Code · NLP / GSOM neural networks · Dynamic test generation from production code · OpenSearch ML anomaly analysis · ISO 42001 audit</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon">🔒</div>
+        <div class="comp-title">Security Domain</div>
+        <div class="comp-list">Endpoint security · Deception / lateral movement · ITDR (AD, Entra ID, Okta, Duo) · AV / anti-spam / anti-phishing · Kernel / driver QA (TDI, WFP, ELAM) · Dark web monitoring</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-icon">👥</div>
+        <div class="comp-title">Engineering Leadership</div>
+        <div class="comp-list">Team building (20+ engineers) · Release management & branching strategy · Product vision & roadmap · Cross-functional ownership (QA + AppSec + IT) · OKR / KPI alignment · Startup to enterprise scale</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOMPLISHMENTS -->
+<section id="accomplishments">
+  <div class="container">
+    <div class="section-label">Impact</div>
+    <h2>What I've delivered.</h2>
+    <div class="acc-grid">
+      <div class="acc-card">
+        <div class="acc-num">01</div>
+        <div class="acc-title">Built QA from zero at a cybersecurity startup</div>
+        <div class="acc-body">First QA hire at Attivo Networks. Scaled to 20+ engineers across 4 groups. Built layered automation framework; reduced manual testing 70%, production defects 35%, release cycle time 25%.</div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-num">02</div>
+        <div class="acc-title">Drove cloud-native migration at SentinelOne scale</div>
+        <div class="acc-body">Architected shift from monolith to true cloud-native SaaS: Kafka → OCSF normaliser → ECS microservices → ClickHouse. Removed session state, adopted NLB, feature flags, and shadow mode for zero-risk detection rollouts.</div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-num">03</div>
+        <div class="acc-title">Founded Security Champions programme at McAfee India</div>
+        <div class="acc-body">Started Security interest group; drove threat modelling across all India products. Programme was absorbed into McAfee's global security scheme and created lasting security culture at site level.</div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-num">04</div>
+        <div class="acc-title">Rescued a failing enterprise product</div>
+        <div class="acc-body">Took over a collapsed enterprise product, rewrote the statement of work, rebuilt the test environment, and recovered the release — extending its commercial value through watermark integrations for adjacent product sales.</div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-num">05</div>
+        <div class="acc-title">Efficacy lab for millions of malware samples</div>
+        <div class="acc-body">At FireEye, built end-to-end efficacy infrastructure to run millions of malware sets for content detection validation — Elasticsearch-backed, Python-automated, with web crawlers for continuous sample acquisition.</div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-num">06</div>
+        <div class="acc-title">Defined converged Cyber & AI Command Centre vision</div>
+        <div class="acc-body">At DigiFortex, built the full platform vision: SOC + GRC + AI Governance + Exposure Management + post-quantum cryptography validation — multi-tenancy, white-labelling, API-first, telemetry-driven.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="container">
+    <div class="section-label">Foundation</div>
+    <h2>Where it started.</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-deg">M.Tech., Computer Technology</div>
+        <div class="edu-school">Indian Institute of Technology (IIT) Delhi · 2000–2001</div>
+        <div class="edu-thesis">Thesis: GSOM neural network–based network intrusion detection system with statistical analysis proving malicious traffic is inherently separable from normal traffic — the origin of a measurement-first approach to security.</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-deg">B.Tech., Electrical Engineering</div>
+        <div class="edu-school">G.B. Pant University, Pantnagar · 1996–2000</div>
+        <div class="edu-thesis">Project: Microcontroller-based radar firmware for DRDO Dehradun — hands-on embedded systems in a constrained environment, building an intuition for system design and optimisation that carries through to today.</div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top: 3.5rem;">Certifications</div>
+    <div class="cert-row">
+      <div class="cert-badge">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">ISO 42001 Lead Auditor</div>
+          <div class="cert-issuer">TÜV SÜD — AI Management Systems</div>
+        </div>
+      </div>
+      <div class="cert-badge">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">Project Management Professional (PMP)</div>
+          <div class="cert-issuer">Project Management Institute · 2007</div>
+        </div>
+      </div>
+      <div class="cert-badge">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">Certified Ethical Hacker (CEH v3)</div>
+          <div class="cert-issuer">EC-Council</div>
+        </div>
+      </div>
+      <div class="cert-badge">
+        <div class="cert-dot"></div>
+        <div>
+          <div class="cert-name">ISO 27001 · ISO 9001 · FedRAMP/FIPS</div>
+          <div class="cert-issuer">Awareness & involvement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-name">Kamal Bisht</div>
+    <div class="footer-contact">
+      <a href="mailto:kamalbisht@yahoo.com">kamalbisht@yahoo.com</a>
+      &nbsp;·&nbsp;
+      +91-9845229450
+      &nbsp;·&nbsp;
+      Bengaluru, India
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll-triggered animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tl-item, .comp-card, .acc-card').forEach(el => observer.observe(el));
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--teal)' : '';
+    });
+  });
+</script>
+</body>
+</html>
